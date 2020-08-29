@@ -2,14 +2,15 @@ package ADS;
 
 public class Performance{
 	
-	public static String default_start = "%s | Test Started!\n";
-	public static String default_end = "%s | Test Finished!\n";
-	public static String default_fail_end = "%s | Test Failed!\n";
-	public static String default_average = "%s | Average Runtime after %d repeats : %f Second\n";
-	public static String default_format = "%s | Test %d Success, Time Elapsed: %f Second\n";
+	public static String default_start       = "%s | Test Started!\n";
+	public static String default_end         = "%s | Test Finished!\n";
+	public static String default_fail_end    = "%s | Test Failed!\n";
+	public static String default_average     = "%s | Average Runtime after %d repeats : %f Second\n";
+	public static String default_format      = "%s | Test %d Success, Time Elapsed: %f Second\n";
 	public static String default_fail_format = "%s | Test %d, Test Failed\n";
 	
-	private Performance(){}
+	private Performance(){
+	}
 	
 	public static double test(TestFunction test, String name){
 		return Performance.test(test, name, 10, true);
@@ -50,11 +51,11 @@ public class Performance{
 	}
 	
 	public static double singleTest(TestFunction test, String name, int testIndex, boolean print){
-		Object preRunObject = test.preRun();
-		long startTime = System.nanoTime();
-		Object runObject = test.runTest(testIndex, preRunObject);
-		long endTime = System.nanoTime();
-		boolean success = test.postRun(runObject);
+		Object  preRunObject = test.preRun();
+		long    startTime    = System.nanoTime();
+		Object  runObject    = test.runTest(testIndex, preRunObject);
+		long    endTime      = System.nanoTime();
+		boolean success      = test.postRun(runObject);
 		if(!success){
 			if(print)
 				System.out.printf(Performance.default_fail_format, name, testIndex);
@@ -68,10 +69,14 @@ public class Performance{
 	
 	public interface TestFunction{
 		
-		default Object preRun(){return null;}
+		default Object preRun(){
+			return null;
+		}
 		
 		Object runTest(int testIndex, Object preRunObject);
 		
-		default boolean postRun(Object runObject){return true;}
+		default boolean postRun(Object runObject){
+			return true;
+		}
 	}
 }

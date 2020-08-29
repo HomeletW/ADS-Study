@@ -81,6 +81,20 @@ public class Array<E> implements RandomAccess{
 	}
 	
 	/**
+	 * Return the first element in array
+	 */
+	public E getFirst(){
+		return get(0);
+	}
+	
+	/**
+	 * Return the last element in array
+	 */
+	public E getLast(){
+		return get(size - 1);
+	}
+	
+	/**
 	 * Get the item at position index
 	 *
 	 * @param index the position to get
@@ -127,6 +141,21 @@ public class Array<E> implements RandomAccess{
 		return -1;
 	}
 	
+	/**
+	 * Remove and return the last element of array, identical to pop
+	 */
+	public E removeLast(){
+		return remove(size - 1);
+	}
+	
+	/**
+	 * Remove and return the first element of array
+	 */
+	public E removeFirst(){
+		return remove(0);
+	}
+	
+	
 	public E remove(int index){
 		checkIndex(index);
 		E ret = data[index];
@@ -164,7 +193,7 @@ public class Array<E> implements RandomAccess{
 	}
 	
 	private void resize(int size){
-		if(size == 0)
+		if(size <= 0)
 			return;
 		E[] newData = (E[]) new Object[size];
 		for(int i = 0; i < this.size; i++)
@@ -179,6 +208,8 @@ public class Array<E> implements RandomAccess{
 		for(int i = 0; i < size; i++){
 			builder.append(data[i]).append(i != size - 1 ? ", " : "]");
 		}
+		if(size == 0)
+			builder.append("]");
 		return builder.toString();
 	}
 	
