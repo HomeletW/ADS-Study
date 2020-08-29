@@ -54,4 +54,8 @@ public class ArrayQueue<E> implements Queue<E>{
 		builder.append(" < Tail");
 		return builder.toString();
 	}
+	
+	public static void main(String[] args){
+	
+	}
 }
