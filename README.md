@@ -1,2 +1,2 @@
 # ADS-Study
-Algorithum &amp; Data Structure Study
+Algorithm &amp; Data Structure Study
