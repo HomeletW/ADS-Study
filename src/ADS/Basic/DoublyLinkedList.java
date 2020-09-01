@@ -2,17 +2,14 @@ package ADS.Basic;
 
 import ADS.Performance;
 
-/**
- * Stands for LinkedDoubleEndedList
- */
-public class LinkedDQList<E>{
+public class DoublyLinkedList<E>{
 	
 	// head always have prev == null and tail always have next == null
 	private final Node head;
 	private final Node tail;
 	private       int  size;
 	
-	public LinkedDQList(){
+	public DoublyLinkedList(){
 		head = new Node(null, null, null);
 		tail = new Node(null, null, null);
 		head.next = tail;
@@ -172,7 +169,7 @@ public class LinkedDQList<E>{
 		Performance.test(new Performance.TestFunction(){
 			@Override
 			public Object runTest(int testIndex, Object preRunObject){
-				LinkedDQList<Integer> linkedList = new LinkedDQList<>();
+				DoublyLinkedList<Integer> linkedList = new DoublyLinkedList<>();
 				for(int i = 0; i < size; i++){
 					linkedList.addFirst(i);
 					linkedList.addLast(i);
