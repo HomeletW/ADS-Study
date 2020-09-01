@@ -184,6 +184,21 @@ public class DoublyLinkedList<E>{
 					linkedList.remove(linkedList.getSize() / 3 * (i % 3 == 0 ? 2 : 1));
 					System.out.println(linkedList);
 				}
+				try{
+					linkedList.remove(size / 2);
+				}catch(IndexOutOfBoundsException e){
+					System.out.println("Can't remove from empty linkedlist");
+				}
+				try{
+					linkedList.removeLast();
+				}catch(IndexOutOfBoundsException e){
+					System.out.println("Can't remove from empty linkedlist");
+				}
+				try{
+					linkedList.removeFirst();
+				}catch(IndexOutOfBoundsException e){
+					System.out.println("Can't remove from empty linkedlist");
+				}
 				return null;
 			}
 		}, "LinkedDQList size=" + size);
