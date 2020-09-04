@@ -24,16 +24,14 @@ public class Performance{
 			try{
 				double perf = Performance.singleTest(test, name, testIndex, print);
 				if(perf < 0){
-					if(print)
-						System.out.printf(Performance.default_fail_end, name);
-					return -1;
+					System.out.printf(Performance.default_fail_end, name);
+					return - 1;
 				}
 				testStat[testIndex] = perf;
 			}catch(Exception e){
 				e.printStackTrace();
-				if(print)
-					System.out.printf(Performance.default_fail_end, name);
-				return -1;
+				System.out.printf(Performance.default_fail_end, name);
+				return - 1;
 			}
 		}
 		double averagePerformance = 0;
@@ -42,8 +40,7 @@ public class Performance{
 				averagePerformance += performance;
 			}
 			averagePerformance /= repeat;
-			if(print)
-				System.out.printf(Performance.default_average, name, repeat, averagePerformance);
+			System.out.printf(Performance.default_average, name, repeat, averagePerformance);
 		}
 		if(print)
 			System.out.printf(Performance.default_end, name);
@@ -51,15 +48,15 @@ public class Performance{
 	}
 	
 	public static double singleTest(TestFunction test, String name, int testIndex, boolean print){
-		Object  preRunObject = test.preRun();
-		long    startTime    = System.nanoTime();
-		Object  runObject    = test.runTest(testIndex, preRunObject);
-		long    endTime      = System.nanoTime();
-		boolean success      = test.postRun(runObject);
-		if(!success){
+		Object preRunObject = test.preRun();
+		long startTime = System.nanoTime();
+		Object runObject = test.runTest(testIndex, preRunObject);
+		long endTime = System.nanoTime();
+		boolean success = test.postRun(runObject);
+		if(! success){
 			if(print)
 				System.out.printf(Performance.default_fail_format, name, testIndex);
-			return -1;
+			return - 1;
 		}
 		double timeElapsed = (endTime - startTime) / 1000000000.0;
 		if(print)
@@ -76,7 +73,7 @@ public class Performance{
 		Object runTest(int testIndex, Object preRunObject);
 		
 		default boolean postRun(Object runObject){
-			return true;
+			return (Boolean) runObject;
 		}
 	}
 }
