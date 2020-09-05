@@ -18,6 +18,25 @@ public class MergeSort{
 		split(arr, 0, arr.length - 1, temp);
 	}
 	
+	public static <E extends Comparable<E>> void sortBottomUp(E[] arr){
+		// create a public temp space that has size arr.length
+		E[] temp = Arrays.copyOf(arr, arr.length);
+		int n = arr.length;
+		for(int checkSize = 1; checkSize < n; checkSize += checkSize){
+			// merge [i, i + checkSize - 1] and [i + checkSize, i + checkSize + checkSize - 1]
+			// the end condition is when the second part still exist, that means we still
+			// have something to merge
+			for(int i = 0; i + checkSize < n; i += checkSize * 2){
+				int left = i, mid = i + checkSize - 1, right = i + checkSize * 2 - 1;
+				// notice here, right isn't necessarily valid at this instance, we need to take a min
+				right = Math.min(right, n - 1);
+				// merge sort optimization, O(n) on sorted array
+				if(arr[mid].compareTo(arr[mid + 1]) > 0)
+					merge(arr, left, mid, right, temp);
+			}
+		}
+	}
+	
 	private static <E extends Comparable<E>> void split(E[] arr, int left, int right, E[] temp){
 		// array with length 1 is already sorted!
 		// if(left >= right)
@@ -107,25 +126,31 @@ public class MergeSort{
 		final Integer[][] arr1 = new Integer[repeat][n];
 		final Integer[][] arr2 = new Integer[repeat][n];
 		final Integer[][] arr3 = new Integer[repeat][n];
+		final Integer[][] arr4 = new Integer[repeat][n];
 		for(int i = 0; i < repeat; i++){
 			Integer[] randomArr = ArrayGenerator.randomArray(n);
 			System.arraycopy(randomArr, 0, arr1[i], 0, n);
 			System.arraycopy(randomArr, 0, arr2[i], 0, n);
 			System.arraycopy(randomArr, 0, arr3[i], 0, n);
+			System.arraycopy(randomArr, 0, arr4[i], 0, n);
 		}
 		System.out.println(String.format("Test Started repeat=%d n=%d!", repeat, n));
 		Performance.test((i, e) -> {
-			MergeSort.sort(arr3[i]);
-			return ArrayGenerator.isSorted(arr3[i]);
-		}, "Merge Sort", repeat, false);
-		Performance.test((i, e) -> {
-			SelectionSort.sort(arr1[i]);
+			MergeSort.sort(arr1[i]);
 			return ArrayGenerator.isSorted(arr1[i]);
-		}, "Selection Sort", repeat, false);
+		}, "Merge Sort          ", repeat, false);
 		Performance.test((i, e) -> {
-			InsertionSort.sort(arr2[i]);
+			MergeSort.sortBottomUp(arr2[i]);
 			return ArrayGenerator.isSorted(arr2[i]);
-		}, "Insertion Sort", repeat, false);
+		}, "Merge Sort Bottom Up", repeat, false);
+		Performance.test((i, e) -> {
+			SelectionSort.sort(arr3[i]);
+			return ArrayGenerator.isSorted(arr3[i]);
+		}, "Selection Sort      ", repeat, false);
+		Performance.test((i, e) -> {
+			InsertionSort.sort(arr4[i]);
+			return ArrayGenerator.isSorted(arr4[i]);
+		}, "Insertion Sort      ", repeat, false);
 	}
 	
 	public static void main(String[] args){
