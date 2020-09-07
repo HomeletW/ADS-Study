@@ -9,6 +9,8 @@ import java.util.Arrays;
 
 public class MergeSort{
 	
+	private static int HYPER_THRESHOLD_INSERTION = 15;
+	
 	private MergeSort(){
 	}
 	
@@ -43,7 +45,7 @@ public class MergeSort{
 		//     return;
 		
 		// if the remaining array is smaller than a certain threshold, we use insertion sort.
-		if(right - left <= 15){
+		if(right - left <= HYPER_THRESHOLD_INSERTION){
 			// we perform insertion sort
 			partialInsertionSort(arr, left, right);
 			return;
@@ -98,10 +100,26 @@ public class MergeSort{
 		}
 	}
 	
-	public static void test(){
-		int repeat = 100;
-		int n = 10000000;
-		Performance.test(new Performance.TestFunction(){
+	public static void test_hyper_threshold_insertion(){
+		double least_cost = 0;
+		int best_c = 0;
+		for(int c = 3; c <= 25; c++){
+			HYPER_THRESHOLD_INSERTION = c;
+			System.out.println("HYPER_THRESHOLD_INSERTION=" + c);
+			double cost = test();
+			if(least_cost == 0 || cost < least_cost){
+				least_cost = cost;
+				best_c = c;
+			}
+		}
+		System.out.println("Best Hyper Threshold=" + best_c);
+		HYPER_THRESHOLD_INSERTION = best_c;
+	}
+	
+	public static double test(){
+		int repeat = 10;
+		int n = 100000;
+		return Performance.test(new Performance.TestFunction(){
 			@Override
 			public Object preRun(){
 				return ArrayGenerator.randomArray(n);
@@ -117,7 +135,7 @@ public class MergeSort{
 			public boolean postRun(Object runObject){
 				return ArrayGenerator.isSorted((Integer[]) runObject);
 			}
-		}, "Merge Sort n=" + n, repeat, true);
+		}, "Merge Sort n=" + n, repeat, false);
 	}
 	
 	public static void compare(){
@@ -154,6 +172,6 @@ public class MergeSort{
 	}
 	
 	public static void main(String[] args){
-		compare();
+		test_hyper_threshold_insertion();
 	}
 }
