@@ -116,7 +116,7 @@ public class QuickSort{
 	private static <E extends Comparable<E>> int[] partitionThreeWay(E[] arr, int left, int right, Random r){
 		int pivot = left + r.nextInt(right - left + 1);
 		swap(arr, left, pivot);
-		int lessThan = left + 1, greaterThan = right;
+		int lessThan = left, greaterThan = right + 1;
 		for(int i = left + 1; i < greaterThan; ){
 			// loop invariant : arr[left + 1, lessThan] < pivot
 			// 					arr[lessThan + 1, i - 1] == pivot
@@ -124,8 +124,8 @@ public class QuickSort{
 			int res = arr[i].compareTo(arr[left]);
 			if(res < 0){
 				// we move to first section
-				swap(arr, i, lessThan);
 				lessThan++;
+				swap(arr, i, lessThan);
 				i++;
 			}else if(res == 0){
 				// we are already at second section
@@ -133,8 +133,8 @@ public class QuickSort{
 			}else{
 				// we move to third section, notice that we don't move i, since after swap, i still need to
 				// compare
-				swap(arr, i, greaterThan);
 				greaterThan--;
+				swap(arr, i, greaterThan);
 			}
 		}
 		swap(arr, lessThan, left);
@@ -191,7 +191,7 @@ public class QuickSort{
 			
 			@Override
 			public Object runTest(int testIndex, Object preRunObject){
-				QuickSort.sortV1((Integer[]) preRunObject);
+				QuickSort.sort((Integer[]) preRunObject);
 				return preRunObject;
 			}
 			
@@ -209,14 +209,12 @@ public class QuickSort{
 		final Integer[][] arr2 = new Integer[repeat][n];
 		final Integer[][] arr3 = new Integer[repeat][n];
 		final Integer[][] arr4 = new Integer[repeat][n];
-		final Integer[][] arr5 = new Integer[repeat][n];
 		for(int i = 0; i < repeat; i++){
 			Integer[] randomArr = ArrayGenerator.randomArray(n);
 			System.arraycopy(randomArr, 0, arr1[i], 0, n);
 			System.arraycopy(randomArr, 0, arr2[i], 0, n);
 			System.arraycopy(randomArr, 0, arr3[i], 0, n);
 			System.arraycopy(randomArr, 0, arr4[i], 0, n);
-			System.arraycopy(randomArr, 0, arr5[i], 0, n);
 		}
 		System.out.println(String.format("Test Started repeat=%d n=%d!", repeat, n));
 		Performance.test((i, e) -> {
@@ -224,21 +222,17 @@ public class QuickSort{
 			return ArrayGenerator.isSorted(arr1[i]);
 		}, "Merge Sort          ", repeat, false);
 		Performance.test((i, e) -> {
-			MergeSort.sortBottomUp(arr2[i]);
+			QuickSort.sortV1(arr2[i]);
 			return ArrayGenerator.isSorted(arr2[i]);
-		}, "Merge Sort Bottom Up", repeat, false);
+		}, "Quick Sort V1       ", repeat, false);
 		Performance.test((i, e) -> {
-			MergeSort.sort(arr3[i]);
+			QuickSort.sortTwoWay(arr3[i]);
 			return ArrayGenerator.isSorted(arr3[i]);
-		}, "Quick Sort          ", repeat, false);
+		}, "Quick Sort Two Way  ", repeat, false);
 		Performance.test((i, e) -> {
-			SelectionSort.sort(arr4[i]);
+			QuickSort.sortThreeWay(arr4[i]);
 			return ArrayGenerator.isSorted(arr4[i]);
-		}, "Selection Sort      ", repeat, false);
-		Performance.test((i, e) -> {
-			InsertionSort.sort(arr5[i]);
-			return ArrayGenerator.isSorted(arr5[i]);
-		}, "Insertion Sort      ", repeat, false);
+		}, "Quick Sort Three Way", repeat, false);
 	}
 	
 	public static void testOnSorted(){
@@ -302,7 +296,7 @@ public class QuickSort{
 	}
 	
 	public static void main(String[] args){
-		testOnFill();
+		compare();
 	}
 	
 	public static Integer[] generateExtremeCase(int n, PivotPositionGenerator g){
